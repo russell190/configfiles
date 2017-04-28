@@ -1,0 +1,236 @@
+# i3 config file (v4)
+#
+# Please see http://i3wm.org/docs/userguide.html for a complete reference!
+#
+# This config file uses keycodes (bindsym) and was written for the QWERTY
+# layout.
+#
+# To get a config file with the same key positions, but for your current
+# layout, use the i3-config-wizard
+#
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below. ISO 10646 = Unicode
+font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+# The font above is very space-efficient, that is, it looks good, sharp and
+# clear in small sizes. However, if you need a lot of unicode glyphs or
+# right-to-left text rendering, you should instead use pango for rendering and
+# chose a FreeType font, such as:
+# font pango:DejaVu Sans Mono 10
+
+# border / titlebar
+new_window normal
+hide_edge_borders vertical
+bindsym Control+Shift+x [class="^.*"] border toggle
+for_window [class="^.*"] border pixel 1
+for_window [class="^Chrome$" title=" - Chromium$"] border pixel 1
+
+gaps inner 15 
+gaps outer 15
+
+# use Mouse+mod4 to drag floating windows to their wanted position
+floating_modifier mod4
+
+# start a terminal
+bindsym mod4+Return exec gnome-terminal
+
+#Open file explorer through thunar
+bindsym mod4+shift+t exec sudo thunar
+
+# kill focused window
+bindsym mod4+Shift+q kill
+
+# start dmenu (a program launcher)
+bindsym mod4+d exec dmenu_run
+# There also is the (new) i3-dmenu-desktop which only displays applications
+# shipping a .desktop file. It is a wrapper around dmenu, so you need that
+# installed.
+# bindsym mod4+d exec --no-startup-id i3-dmenu-desktop
+
+# change focus
+bindsym mod4+j focus left
+bindsym mod4+k focus down
+bindsym mod4+l focus up
+bindsym mod4+semicolon focus right
+
+# Create Log out, Reboot, Poweroff bindings
+mode "Exit (L)ogout, (R)eboot, (P)oweroff" {
+        bindsym mod4+r exec systemctl reboot
+        bindsym mod4+l exit
+        bindsym mod4+p exec systemctl poweroff
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+bindsym mod4+Shift+e mode "Exit (L)ogout, (R)eboot, (P)oweroff"
+
+
+# Sreen brightness controls
+bindsym XF86MonBrightnessUp exec xbright +20 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbright -20 # decrease screen brightness
+
+#Audio controls
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+
+exec_always feh --bg-scale /home/rjacobs/Pictures/wallpaper.png
+
+
+# alternatively, you can use the cursor keys:
+bindsym mod4+Left focus left
+bindsym mod4+Down focus down
+bindsym mod4+Up focus up
+bindsym mod4+Right focus right
+
+# move focused window
+bindsym mod4+Shift+j move left
+bindsym mod4+Shift+k move down
+bindsym mod4+Shift+l move up
+bindsym mod4+Shift+semicolon move right
+
+# alternatively, you can use the cursor keys:
+bindsym mod4+Shift+Left move left
+bindsym mod4+Shift+Down move down
+bindsym mod4+Shift+Up move up
+bindsym mod4+Shift+Right move right
+
+# split in horizontal orientation
+bindsym mod4+h split h
+
+# split in vertical orientation
+bindsym mod4+v split v
+
+# enter fullscreen mode for the focused container
+bindsym mod4+f fullscreen
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym mod4+s layout stacking
+bindsym mod4+w layout tabbed
+bindsym mod4+e layout toggle split
+
+# toggle tiling / floating
+bindsym mod4+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym mod4+space focus mode_toggle
+
+# focus the parent container
+bindsym mod4+a focus parent
+
+# focus the child container
+#bindsym mod4+d focus child
+
+
+
+# move the currently focused window to the scratchpad
+bindsym mod4+Shift+minus move scratchpad
+
+# Show the next scratchpad window or hide the focused scratchpad window.
+# If there are multiple scratchpad windows, this command cycles through them.
+bindsym mod4+minus scratchpad show
+
+set $workspace1 ""
+set $workspace2 ""
+set $workspace3 ""
+
+# switch to 
+bindsym mod4+1 workspace $workspace1
+bindsym mod4+2 workspace $workspace2
+bindsym mod4+3 workspace $workspace3
+bindsym mod4+4 workspace 4
+bindsym mod4+5 workspace 5
+bindsym mod4+6 workspace 6
+bindsym mod4+7 workspace 7
+bindsym mod4+8 workspace 8
+bindsym mod4+9 workspace 9
+bindsym mod4+0 workspace 10
+
+# move focused container to workspace
+bindsym mod4+Shift+1 move container to workspace $workspace1
+bindsym mod4+Shift+2 move container to workspace $workspace2
+bindsym mod4+Shift+3 move container to workspace $workspace3
+bindsym mod4+Shift+4 move container to workspace 4
+bindsym mod4+Shift+5 move container to workspace 5
+bindsym mod4+Shift+6 move container to workspace 6
+bindsym mod4+Shift+7 move container to workspace 7
+bindsym mod4+Shift+8 move container to workspace 8
+bindsym mod4+Shift+9 move container to workspace 9
+bindsym mod4+Shift+0 move container to workspace 10
+
+assign [class="Gnome-terminal"] $workspace1
+assign [class="Thunar"] $workspace2
+assign [class="Chromium-browser"] $workspace3
+
+
+# reload the configuration file
+bindsym mod4+Shift+c reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym mod4+Shift+r restart
+
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym j           resize shrink width 10 px or 10 ppt
+        bindsym k           resize grow height 10 px or 10 ppt
+        bindsym l           resize shrink height 10 px or 10 ppt
+        bindsym semicolon   resize grow width 10 px or 10 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Left        resize shrink width 10 px or 10 ppt
+        bindsym Down        resize grow height 10 px or 10 ppt
+        bindsym Up          resize shrink height 10 px or 10 ppt
+        bindsym Right       resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+bindsym mod4+r mode "resize"
+
+# Start i3bar to display a workspace bar (plus the system information i3status 
+
+# finds out, if available)
+bar {
+font pango: Terminus (TTF), FontAwesome 12px
+  #status_command i3status -c ~/.i3/i3status.conf
+status_command ~/.i3/custom-i3status.sh
+position top
+
+  colors {
+    statusline #AAAAAA
+    background #333333
+    focused_workspace #282828 #282828 #FFFFFF
+    inactive_workspace #333333 #333333 #AAAAAA
+  }
+
+}
+
+#######################################################################
+# automatically start i3-config-wizard to offer the user to create a
+# keysym-based config which used his favorite modifier (alt or windows)
+#
+# i3-config-wizard will not launch if there already is a config file
+# in ~/.i3/config.
+#
+# Please remove the following exec line:
+#######################################################################
+exec i3-config-wizard
+exec chromium-browser
+
+
+client.unfocused #333333 #333333 #FFFFFF #333333
+client.focused_inactive #333333 #333333 #FFFFFF #000000
+client.focused #000000 #000000 #FFFFFF #000000
+
+
+
