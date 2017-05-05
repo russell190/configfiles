@@ -6,6 +6,7 @@ do
 
     dir=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
     mpd_song=$(mpc current)
+    mpd_song=${mpd_song// & / and }
 weather_shit=$(/home/rjacobs/i3-weather/weather.py 2402731)
 
     if [ "$mpd_song" != "" ]; then
@@ -19,6 +20,6 @@ weather_shit=$(/home/rjacobs/i3-weather/weather.py 2402731)
     echo -n "$line |  $weather_shit" || 
 exit 1
 fi
-sleep 10
+sleep 5
 
 done
