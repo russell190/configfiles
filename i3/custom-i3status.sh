@@ -10,15 +10,13 @@ weather_shit=$(/home/rjacobs/i3-weather/weather.py 2402731)
 
     if [ "$mpd_song" != "" ]; then
         mpd_status=$(mpc status | tail -2 | head -1 | cut -d' ' -f1 | tr -d '[]')
+else
         if [ "$mpd_status" = "playing" ]; then            
-            echo -n "  $mpd_song | $line |  $weather_shit"  || exit 
+            echo -n "  $mpd_song | $line |  $weather_shit"  || exit 1
             continue
-        fi
-	sleep 5m
+        else
         echo -n "$line |  $weather_shit" || exit 1
         continue
     fi
-    echo -n "$line |  $weather_shit" || 
-sleep 5m exit 1
-
+sleep 5m
 done
