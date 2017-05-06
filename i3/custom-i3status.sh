@@ -8,18 +8,19 @@ do
     mpd_song=$(mpc current)
     mpd_song=${mpd_song// & / and }
 weather_shit=$(/home/rjacobs/i3-weather/weather.py 2402731)
+sleeppls= $weather_shit sleep 5m
 
     if [ "$mpd_song" != "" ]; then
         mpd_status=$(mpc status | tail -2 | head -1 | cut -d' ' -f1 | tr -d '[]')
-      else if [ "$mpd_status" = "playing" ]; then            
-            echo -n "  $mpd_song | $line |  $weather_shit"  || exit 1
+      if [ "$mpd_status" = "playing" ]; then            
+            echo -n "  $mpd_song | $line |  $weather_shit" || exit 1
             continue
+	else
         echo -n "$line |  $weather_shit" || exit 1
         continue
-    fi
-    echo -n "$line |  $weather_shit" || 
-exit 1
 fi
-sleep 5
-
+$sleeppls
+fi
+$sleeppls
+exit 1
 done
