@@ -1,4 +1,5 @@
 #!/bin/bash
+weather_shit=$(~/i3-weather/weather.py 2402731)
 
 i3status -c ~/.i3/i3status.conf | while :
 do
@@ -7,8 +8,7 @@ do
     dir=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
     mpd_song=$(mpc current)
     mpd_song=${mpd_song// & / and }
-weather_shit=$(/home/rjacobs/i3-weather/weather.py 2402731)
-sleeppls= $weather_shit sleep 5m
+
 
     if [ "$mpd_song" != "" ]; then
         mpd_status=$(mpc status | tail -2 | head -1 | cut -d' ' -f1 | tr -d '[]')
@@ -19,8 +19,6 @@ sleeppls= $weather_shit sleep 5m
         echo -n "$line |  $weather_shit" || exit 1
         continue
 fi
-$sleeppls
 fi
-$sleeppls
 exit 1
 done
