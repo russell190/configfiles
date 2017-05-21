@@ -15,10 +15,10 @@ do
       if [ "$mpd_status" = "playing" ]; then            
             echo -n "  $mpd_song | $line |  $weather_shit" || exit 1
             continue
+fi
 	else
         echo -n "$line |  $weather_shit" || exit 1
         continue
-fi
 fi
 exit 1
 done
