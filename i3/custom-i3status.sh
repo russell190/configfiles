@@ -1,5 +1,6 @@
 #!/bin/bash
-weather=$(~/i3-weather/weather.py 2483553)
+
+
 
 i3status -c ~/.i3/i3status.conf | while :
 do
@@ -9,11 +10,20 @@ do
     mpd_song=$(mpc current | sed 's?[<>*]?_?g')
     mpd_song=${mpd_song// & / and }
     phone_status=$(ps -ef | grep "indicator-kdeconnect" | grep -v "grep" | wc -l)
+    weather=$(cat /home/rjacobs/i3_weather_output.txt)
+
+    
+
+
+
 
 if [ "$phone_status" = 1 ]; then
 phone_text=$(echo "")
-else
+elif [ "$phone_status" = 0 ]; then
 phone_text=$(echo " phone n/a.")
+else
+phone_text=$(echo "")
+fi
 
 
     if [ "$mpd_song" != "" ]; then
@@ -24,7 +34,6 @@ phone_text=$(echo " phone n/a.")
 	else
         echo -n "  Paused | $line |   $weather |$phone_text" | sed 's?|?//?g'|| exit 1
         continue
-fi
 fi
 fi
 echo -n "  Paused | $line |   $weather |$phone_text" | sed 's?|?//?g'|| exit 1
