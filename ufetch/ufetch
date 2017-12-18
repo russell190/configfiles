@@ -11,7 +11,6 @@ os="Fedora 25"
 kernel="$(uname -sr | cut -d '-' -f1)"
 uptime="$(uptime -p | sed 's/up //')"
 shell="$(basename ${SHELL})"
-mpc=$(mpc current)
 if [ -z "${wm}" ]; then
 
 id="$(xprop -root -notype _NET_SUPPORTING_WM_CHECK)"
@@ -74,17 +73,12 @@ if [ -z "${colors}" ]; then
 
     unset -v blocks blocks2 cols
 
-    # Tell info() that we printed manually.
-    prin=1
-
-
 
 
 
 
 ## DEFINE COLORS
 
-# probably dont change these
 bc="$(tput bold)"		# bold
 c0="$(tput setaf 245)"	# black
 c1="$(tput setaf 1)"	# red
