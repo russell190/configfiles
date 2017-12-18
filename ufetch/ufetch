@@ -1,0 +1,117 @@
+#!/bin/sh
+#
+# ufetch-crux - tiny system info for crux
+#
+
+## INFO
+
+# user is already defined
+hostname="$(hostname)"
+os="Fedora 25"
+kernel="$(uname -sr | cut -d '-' -f1)"
+uptime="$(uptime -p | sed 's/up //')"
+shell="$(basename ${SHELL})"
+mpc=$(mpc current)
+if [ -z "${wm}" ]; then
+
+id="$(xprop -root -notype _NET_SUPPORTING_WM_CHECK)"
+        id="${id##* }"
+        wm="$(xprop -id "$id" -notype -len 100 -f _NET_WM_NAME 8t)"
+        wm="${wm/*_NET_WM_NAME = }"
+        wm="${wm/\"}"
+        wm="${wm/\"*}"
+
+        # Window Maker does not set _NET_WM_NAME
+        [[ "$wm" =~ "WINDOWMAKER" ]] && wm="wmaker"
+
+        # Fallback for Wayland wms.
+        [[ "$wm" == "xwlc" ]] && \
+            wm="$(ps -e | grep -m 1 -o -F -e "sway" -e "orbment" -e "velox" -e "orbital")"
+
+fi
+
+if [ -z "${colors}" ]; then
+
+        declare block_width=2
+        declare block_height=1
+        declare block_range=(0 7)
+
+
+
+
+ printf -v block_width "%${block_width}s"
+
+        # Set variables.
+        start="${block_range[0]}"
+        end="${block_range[1]}"
+        
+
+        # Generate the string.
+        for ((start; start<=end; start++)); do
+            case "$start" in
+                [0-6]) blocks+="${reset}\033[3${start}m\033[4${start}m${block_width}" ;;
+                7) blocks+="${reset}\033[3${start}m\033[4${start}m${block_width}" ;;
+                *) blocks2+="\033[38;5;${start}m\033[48;5;${start}m${block_width}" ;;
+            esac
+        done
+
+        # Convert height into spaces.
+        printf -v block_spaces "%${block_height}s"
+
+        # Convert the spaces into rows of blocks.
+        [[ "$blocks" ]] &&  cols+="${block_spaces// /${blocks}${reset}nl}"
+        [[ "$blocks2" ]] && cols+="${block_spaces// /${blocks2}${reset}nl}"
+
+        # Add newlines to the string.
+        cols="${cols%%'nl'}"
+        cols="${cols//nl/\\n\\033[${text_padding}C${zws}}"
+
+        # Add block height to info height.
+        info_height="$((info_height+=block_height+2))"
+       colors=$(printf "%b\n" "${cols}")
+
+    fi
+
+    unset -v blocks blocks2 cols
+
+    # Tell info() that we printed manually.
+    prin=1
+
+
+
+
+
+
+## DEFINE COLORS
+
+# probably dont change these
+bc="$(tput bold)"		# bold
+c0="$(tput setaf 245)"	# black
+c1="$(tput setaf 1)"	# red
+c2="$(tput setaf 2)"	# green
+c3="$(tput setaf 3)"	# yellow
+c4="$(tput setaf 4)"	# blue
+c5="$(tput setaf 5)"	# magenta
+c6="$(tput setaf 111)"	# cyan
+c7="$(tput setaf 7)"	# white
+rc="$(tput sgr0)"		# reset
+
+# you can change these
+lc="${rc}${bc}${c6}"	# labels
+nc="${rc}${bc}${c6}"	# user and hostname
+ic="${rc}${bc}${c7}"	# info
+pc="${rc}${c6}"			# penguin
+
+## OUTPUT
+
+cat <<EOF
+
+${pc}      ___
+${pc}     (${c7}.· ${pc}|    ${lc}OS:        ${ic}${os}${rc}
+${pc}     (${c3}<> ${pc}|    ${lc}KERNEL:    ${ic}${kernel}${rc}
+${pc}    / ${c7}__  ${pc}\\   ${lc}UPTIME:    ${ic}${uptime}${rc}
+${pc}   ( ${c7}/  \\ ${pc}/|  ${lc}WM:        ${ic}${wm}${rc}
+${c3}  _${pc}/\\ ${c7}__)${pc}/${c3}_${pc})  ${lc}SHELL:     ${ic}${shell}${rc}
+${c3}  \/${pc}-____${c3}\/   ${lc}CL:        ${ic}${colors}${rc}
+
+EOF
